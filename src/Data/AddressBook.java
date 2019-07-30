@@ -16,6 +16,7 @@ public class AddressBook implements Serializable {
 
     private final ObservableList<CustomerInfo> entries;
 
+
     public AddressBook(List<CustomerInfo> startingEntries) {
         entries = FXCollections.observableArrayList(startingEntries);
     }
