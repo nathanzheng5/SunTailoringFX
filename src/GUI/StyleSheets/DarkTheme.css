@@ -99,11 +99,11 @@
     -fx-border-radius: 2px;
 }
 
-.check-box:selected .box {
-    -fx-background-color: #4b6eaf;
+.check-box .mark {
+    -fx-background-color: #45494a;
 }
 
-.check-box .mark {
+.check-box:selected .mark {
     -fx-background-color: #ffffff;
 }
 
