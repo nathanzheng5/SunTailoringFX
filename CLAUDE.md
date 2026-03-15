@@ -46,6 +46,10 @@ test/
 - Barcode printing on invoices
 - Legacy data migration scripts
 
+## Documentation
+
+- [`docs/theme-switching.md`](docs/theme-switching.md) — How light/dark theme switching works (ThemeManager, CSS architecture, PlantUML diagrams)
+
 ## Development Notes
 
 - Run/build through IntelliJ IDEA — no CLI build scripts exist

@@ -12,13 +12,17 @@ public class SunTailoringGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ThemeManager.getInstance().init(
+                getClass().getResource("StyleSheets/LightTheme.css").toExternalForm(),
+                getClass().getResource("StyleSheets/DarkTheme.css").toExternalForm());
+
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SunTailoringGUI.fxml"));
         Parent root = fxmlLoader.load();
         final SunTailoringGUIController controller = fxmlLoader.getController();
         primaryStage.setTitle(APP_TITLE);
         primaryStage.getIcons().add(Assets.ST_LOGO);
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("StyleSheets/DarkTheme.css").toExternalForm());
+        ThemeManager.getInstance().registerScene(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {

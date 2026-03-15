@@ -6,7 +6,6 @@
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="DefaultSpacing" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AddressBookDialogController">
    <stylesheets>
       <URL value="@StyleSheets/Containers.css" />
-      <URL value="@StyleSheets/DarkTheme.css" />
    </stylesheets>
    <children>
       <TextField fx:id="searchTextField" promptText="Search customer name, phone number, or email" />

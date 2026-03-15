@@ -13,7 +13,6 @@
    <stylesheets>
       <URL value="@StyleSheets/Containers.css" />
       <URL value="@StyleSheets/TextControls.css" />
-      <URL value="@StyleSheets/DarkTheme.css" />
    </stylesheets>
    <children>
       <HBox>

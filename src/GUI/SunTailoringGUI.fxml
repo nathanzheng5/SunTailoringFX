@@ -12,7 +12,6 @@
       <URL value="@StyleSheets/Buttons.css" />
       <URL value="@StyleSheets/TextControls.css" />
       <URL value="@StyleSheets/Containers.css" />
-      <URL value="@StyleSheets/DarkTheme.css" />
    </stylesheets>
    <center>
       <VBox BorderPane.alignment="CENTER">
@@ -224,6 +223,8 @@
                         <MenuItem fx:id="quickOthersSettingsMenuItem" mnemonicParsing="false" onAction="#showQuickItemsSettingsDialog" text="Quick Others..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CheckMenuItem fx:id="sendEmailWhenDoneCheckMenuItem" mnemonicParsing="false" onAction="#setSendEmailWhenMarkedDone" text="Send Email when Invoice Marked &quot;Done&quot;" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <CheckMenuItem fx:id="darkThemeMenuItem" mnemonicParsing="false" onAction="#toggleDarkTheme" selected="true" text="Dark Theme" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

@@ -1,0 +1,19 @@
+/* LightTheme.css - Light theme for SunTailoringFX (Modena-based) */
+
+.root {
+    -fx-base: #ececec;
+    -fx-background: #ececec;
+    -fx-control-inner-background: #ffffff;
+    -fx-focus-color: #039ED3;
+    -fx-faint-focus-color: #039ED322;
+    -fx-accent: #0096c9;
+}
+
+/* Reset layout panel backgrounds to Modena defaults */
+.border-pane,
+.v-box,
+.h-box,
+.grid-pane,
+.anchor-pane {
+    -fx-background-color: -fx-background;
+}

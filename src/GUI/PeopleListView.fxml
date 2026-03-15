@@ -6,8 +6,5 @@
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="GUI.PeopleListController" spacing="10" alignment="CENTER" prefWidth="300" prefHeight="400">
-    <stylesheets>
-        <URL value="@StyleSheets/DarkTheme.css" />
-    </stylesheets>
     <ListView fx:id="listView" />
 </VBox>

@@ -345,3 +345,46 @@
 .anchor-pane {
     -fx-background-color: #2b2b2b;
 }
+
+/* Calendar dark overrides — .root prefix raises specificity above node-level Calendar.css */
+.root .calendar_pane {
+    -fx-background-color: #2b2b2b;
+    -fx-border-color: #555555;
+}
+
+.root .weekday-header {
+    -fx-background-color: #1a6b65;
+    -fx-border-color: #3c3f41;
+}
+
+.root .inactive_day_box {
+    -fx-background-color: #3a3a3a;
+}
+
+.root .today_box {
+    -fx-background-color: #1a4a8a;
+}
+
+.root .invoice_label {
+    -fx-background-color: #4a4228;
+}
+
+.root .invoice_label:hover {
+    -fx-background-color: #6b5e2a;
+}
+
+.root .invoice_label_dry_clean_only {
+    -fx-background-color: #1a5a5a;
+}
+
+.root .invoice_label_dry_clean_only:hover {
+    -fx-background-color: #1a7a7a;
+}
+
+.root .invoice_label_not_done {
+    -fx-background-color: #5a2a2a;
+}
+
+.root .invoice_label_not_done:hover {
+    -fx-background-color: #8a1a3a;
+}

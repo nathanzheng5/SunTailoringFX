@@ -63,6 +63,8 @@ public class SunTailoringGUIController implements Initializable {
     @FXML
     public MenuItem quickOthersSettingsMenuItem;
     public CheckMenuItem sendEmailWhenDoneCheckMenuItem;
+    @FXML
+    public CheckMenuItem darkThemeMenuItem;
     public Label toDoTomorrowCount;
 
     @FXML
@@ -186,15 +188,17 @@ public class SunTailoringGUIController implements Initializable {
 
     private void updateInvoiceNumberTextFieldBackgroundColor() {
         if (invoiceNumberTextField != null) {
+            boolean dark = ThemeManager.getInstance().isDarkMode();
             switch (activeInvoiceState) {
                 case NEW:
-                    invoiceNumberTextField.setStyle("-fx-control-inner-background: lightgreen");
+                    invoiceNumberTextField.setStyle("-fx-background-color: " + (dark ? "#2d5a2d" : "lightgreen"));
                     break;
                 case EDITED:
-                    invoiceNumberTextField.setStyle("-fx-control-inner-background: lightpink");
+                    invoiceNumberTextField.setStyle("-fx-background-color: " + (dark ? "#5a2d2d" : "lightpink"));
                     break;
                 case SAVED:
-                    invoiceNumberTextField.setStyle("-fx-control-inner-background: white");
+                    // Clear inline style so the active theme CSS takes over
+                    invoiceNumberTextField.setStyle("");
                     break;
                 default:
                     break;
@@ -411,7 +415,7 @@ public class SunTailoringGUIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        invoiceNumberTextField.setStyle("-fx-control-inner-background: lightgreen");
+        updateInvoiceNumberTextFieldBackgroundColor();
 
         rootPane.setOnKeyPressed(keyEvent -> {
             if (Shortcut.CTRL_S.getKeyCombo().match(keyEvent)) {
@@ -567,7 +571,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Address Book");
             stage.getIcons().add(Assets.ADDRESS_BOOK_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -637,7 +641,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Configure Quick " + quickItemsName);
             stage.getIcons().add(Assets.SETTINGS_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -683,7 +687,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Invoice Store");
             stage.getIcons().add(Assets.STORE_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
             stage.setOnCloseRequest(e -> controller.saveFilters());
 
@@ -703,7 +707,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Expense Store");
             stage.getIcons().add(Assets.STORE_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -728,7 +732,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Calendar");
             stage.getIcons().add(Assets.CALENDAR_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -745,7 +749,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Help");
             stage.getIcons().add(Assets.HELP_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -780,7 +784,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Mail");
             stage.getIcons().add(Assets.EMAIL_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -806,7 +810,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Invoice Store Statistics");
             stage.getIcons().add(Assets.STATS_ICON);
-            stage.setScene(createDarkScene(root));
+            stage.setScene(createScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -814,9 +818,15 @@ public class SunTailoringGUIController implements Initializable {
         }
     }
 
-    private Scene createDarkScene(Parent root) {
+    @FXML
+    public void toggleDarkTheme() {
+        ThemeManager.getInstance().setDarkMode(darkThemeMenuItem.isSelected());
+        updateInvoiceNumberTextFieldBackgroundColor();
+    }
+
+    private Scene createScene(Parent root) {
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("StyleSheets/DarkTheme.css").toExternalForm());
+        ThemeManager.getInstance().registerScene(scene);
         return scene;
     }
 
