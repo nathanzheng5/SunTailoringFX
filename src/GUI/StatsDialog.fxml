@@ -10,12 +10,13 @@
 <?import java.lang.String?>
 <?import java.net.URL?>
 <VBox fx:id="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.StatsDialogController">
+   <stylesheets>
+      <URL value="@StyleSheets/Containers.css" />
+      <URL value="@StyleSheets/TextControls.css" />
+      <URL value="@StyleSheets/DarkTheme.css" />
+   </stylesheets>
    <children>
       <HBox>
-         <stylesheets>
-            <URL value="@StyleSheets/Containers.css" />
-            <URL value="@StyleSheets/TextControls.css" />
-         </stylesheets>
          <styleClass>
             <String fx:value="DefaultSpacing" />
             <String fx:value="medium-text-field" />

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:id="root" styleClass="DefaultSpacing" stylesheets="@StyleSheets/Containers.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.QuickItemsSettingsDialogController">
+<VBox fx:id="root" styleClass="DefaultSpacing" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.QuickItemsSettingsDialogController">
+   <stylesheets>
+      <URL value="@StyleSheets/Containers.css" />
+      <URL value="@StyleSheets/DarkTheme.css" />
+   </stylesheets>
    <children>
       <HBox styleClass="DefaultSpacing">
          <children>

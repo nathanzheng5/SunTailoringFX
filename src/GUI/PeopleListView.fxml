@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="GUI.PeopleListController" spacing="10" alignment="CENTER" prefWidth="300" prefHeight="400">
+    <stylesheets>
+        <URL value="@StyleSheets/DarkTheme.css" />
+    </stylesheets>
     <ListView fx:id="listView" />
 </VBox>

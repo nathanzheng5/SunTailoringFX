@@ -17,7 +17,9 @@ public class SunTailoringGUI extends Application {
         final SunTailoringGUIController controller = fxmlLoader.getController();
         primaryStage.setTitle(APP_TITLE);
         primaryStage.getIcons().add(Assets.ST_LOGO);
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("StyleSheets/DarkTheme.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             controller.stopSummaryTimer();

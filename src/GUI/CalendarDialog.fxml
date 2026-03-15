@@ -54,5 +54,6 @@
    <stylesheets>
       <URL value="@StyleSheets/Containers.css" />
       <URL value="@StyleSheets/Calendar.css" />
+      <URL value="@StyleSheets/DarkTheme.css" />
    </stylesheets>
 </VBox>

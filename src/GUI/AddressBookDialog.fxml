@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="DefaultSpacing" stylesheets="@StyleSheets/Containers.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AddressBookDialogController">
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="DefaultSpacing" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AddressBookDialogController">
+   <stylesheets>
+      <URL value="@StyleSheets/Containers.css" />
+      <URL value="@StyleSheets/DarkTheme.css" />
+   </stylesheets>
    <children>
       <TextField fx:id="searchTextField" promptText="Search customer name, phone number, or email" />
       <TableView fx:id="addressBookTable">

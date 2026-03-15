@@ -567,7 +567,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Address Book");
             stage.getIcons().add(Assets.ADDRESS_BOOK_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -637,7 +637,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Configure Quick " + quickItemsName);
             stage.getIcons().add(Assets.SETTINGS_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -683,7 +683,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Invoice Store");
             stage.getIcons().add(Assets.STORE_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
             stage.setOnCloseRequest(e -> controller.saveFilters());
 
@@ -703,7 +703,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Expense Store");
             stage.getIcons().add(Assets.STORE_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -728,7 +728,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Calendar");
             stage.getIcons().add(Assets.CALENDAR_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -745,7 +745,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Help");
             stage.getIcons().add(Assets.HELP_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -780,7 +780,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Mail");
             stage.getIcons().add(Assets.EMAIL_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
@@ -806,12 +806,18 @@ public class SunTailoringGUIController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Invoice Store Statistics");
             stage.getIcons().add(Assets.STATS_ICON);
-            stage.setScene(new Scene(root));
+            stage.setScene(createDarkScene(root));
             stage.show();
 
         } catch (Exception e) {
             GuiUtils.showWarningAlertAndWait("Failed loading invoice store dialog");
         }
+    }
+
+    private Scene createDarkScene(Parent root) {
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("StyleSheets/DarkTheme.css").toExternalForm());
+        return scene;
     }
 
     private void setActiveInvoice(Invoice target, ActiveInvoiceState state) {

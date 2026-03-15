@@ -1,48 +1,48 @@
 .calendar_pane {
-    -fx-background-color:  white;
+    -fx-background-color: #2b2b2b;
     -fx-border-style: dashed;
     -fx-border-width: .5;
-    -fx-border-color: gray;
+    -fx-border-color: #555555;
 }
 
 .weekday-header {
     -fx-font: bold 17px "System";
     -fx-font-style: normal;
-    -fx-background-color:  #26A69A;
+    -fx-background-color: #1a6b65;
     -fx-border-style: solid;
     -fx-border-insets: 1;
     -fx-border-width: .2;
-    -fx-border-color: white;
+    -fx-border-color: #3c3f41;
 }
 
 .inactive_day_box {
-    -fx-background-color: lightgray;
+    -fx-background-color: #3a3a3a;
 }
 
 .today_box {
-    -fx-background-color: dodgerblue;
+    -fx-background-color: #1a4a8a;
 }
 
 .invoice_label {
-    -fx-background-color: beige;
+    -fx-background-color: #4a4228;
 }
 
 .invoice_label:hover {
-    -fx-background-color: darkkhaki;
+    -fx-background-color: #6b5e2a;
 }
 
 .invoice_label_dry_clean_only {
-    -fx-background-color: cyan;
+    -fx-background-color: #1a5a5a;
 }
 
 .invoice_label_dry_clean_only:hover {
-    -fx-background-color: darkcyan;
+    -fx-background-color: #1a7a7a;
 }
 
 .invoice_label_not_done {
-    -fx-background-color: lightpink;
+    -fx-background-color: #5a2a2a;
 }
 
 .invoice_label_not_done:hover {
-    -fx-background-color: deeppink;
+    -fx-background-color: #8a1a3a;
 }
