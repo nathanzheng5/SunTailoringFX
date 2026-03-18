@@ -8,6 +8,7 @@ import Utils.GmailSender;
 import Utils.PathUtils;
 import Utils.PropertiesConfiguration;
 import Utils.Utils;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -398,16 +399,28 @@ public class SunTailoringGUIController implements Initializable {
         };
     }
 
+    private <T> void setupPromptTextButtonCell(ComboBox<T> comboBox) {
+        comboBox.setButtonCell(new ListCell<T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item == null ? comboBox.getPromptText() : item.toString());
+            }
+        });
+    }
+
     @SuppressWarnings("unchecked")
     public void quickItemComboBoxOnAction(ActionEvent actionEvent) {
         if (!suspendQuickItemComboBoxAction) {
             final Object source = actionEvent.getSource();
             if (source == quickJacketComboBox || source == quickPantComboBox || source == quickShirtComboBox
                     || source == quickDryCleanComboBox || source == quickDressComboBox || source == quickOtherComboBox) {
-                final Item selectedItem = ((ComboBox<Item>) source).getSelectionModel().getSelectedItem();
+                final ComboBox<Item> comboBox = (ComboBox<Item>) source;
+                final Item selectedItem = comboBox.getSelectionModel().getSelectedItem();
                 if (selectedItem != null) {
                     activeInvoice.getItems().add(selectedItem.copy());
                     setActiveInvoiceState(ActiveInvoiceState.EDITED);
+                    Platform.runLater(() -> comboBox.setValue(null));
                 }
             }
         }
@@ -420,6 +433,13 @@ public class SunTailoringGUIController implements Initializable {
         itemsTableQuantityCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1334));
         itemsTableUnitPriceCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1333));
         itemsTablePriceCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1333));
+
+        setupPromptTextButtonCell(quickJacketComboBox);
+        setupPromptTextButtonCell(quickPantComboBox);
+        setupPromptTextButtonCell(quickShirtComboBox);
+        setupPromptTextButtonCell(quickDressComboBox);
+        setupPromptTextButtonCell(quickDryCleanComboBox);
+        setupPromptTextButtonCell(quickOtherComboBox);
 
         updateInvoiceNumberTextFieldBackgroundColor();
 
