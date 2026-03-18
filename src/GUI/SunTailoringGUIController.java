@@ -415,6 +415,12 @@ public class SunTailoringGUIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        itemsTableNameCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.60));
+        itemsTableQuantityCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1334));
+        itemsTableUnitPriceCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1333));
+        itemsTablePriceCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1333));
+
         updateInvoiceNumberTextFieldBackgroundColor();
 
         rootPane.setOnKeyPressed(keyEvent -> {

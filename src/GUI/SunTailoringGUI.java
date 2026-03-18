@@ -24,6 +24,7 @@ public class SunTailoringGUI extends Application {
         Scene scene = new Scene(root);
         ThemeManager.getInstance().registerScene(scene);
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             controller.stopSummaryTimer();

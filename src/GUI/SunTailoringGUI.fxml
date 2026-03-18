@@ -24,9 +24,9 @@
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
-            <HBox styleClass="DefaultSpacing">
+            <HBox styleClass="DefaultSpacing" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox spacing="5.0">
+                  <VBox spacing="5.0" HBox.hgrow="NEVER">
                      <children>
                         <GridPane hgap="10.0" styleClass="DefaultSpacing" vgap="10.0">
                           <columnConstraints>
@@ -163,24 +163,32 @@
                      </styleClass>
                   </VBox>
                   <Separator orientation="VERTICAL" prefHeight="577.0" prefWidth="0.0" />
-                  <VBox>
+                  <VBox HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox styleClass="DefaultSpacing">
+                        <GridPane hgap="5.0" styleClass="DefaultSpacing">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="ALWAYS" percentWidth="16.67" />
+                              <ColumnConstraints hgrow="ALWAYS" percentWidth="16.67" />
+                              <ColumnConstraints hgrow="ALWAYS" percentWidth="16.67" />
+                              <ColumnConstraints hgrow="ALWAYS" percentWidth="16.67" />
+                              <ColumnConstraints hgrow="ALWAYS" percentWidth="16.67" />
+                              <ColumnConstraints hgrow="ALWAYS" percentWidth="16.67" />
+                           </columnConstraints>
                            <children>
-                              <ComboBox fx:id="quickJacketComboBox" onAction="#quickItemComboBoxOnAction" prefWidth="130.0" promptText="Jackets" />
-                              <ComboBox fx:id="quickPantComboBox" onAction="#quickItemComboBoxOnAction" prefWidth="130.0" promptText="Pants" />
-                              <ComboBox fx:id="quickShirtComboBox" onAction="#quickItemComboBoxOnAction" prefWidth="130.0" promptText="Shirts" />
-                              <ComboBox fx:id="quickDressComboBox" onAction="#quickItemComboBoxOnAction" prefWidth="130.0" promptText="Dress" />
-                              <ComboBox fx:id="quickDryCleanComboBox" onAction="#quickItemComboBoxOnAction" prefWidth="130.0" promptText="Dry Clean" />
-                              <ComboBox fx:id="quickOtherComboBox" onAction="#quickItemComboBoxOnAction" prefWidth="130.0" promptText="Others" />
+                              <ComboBox fx:id="quickJacketComboBox" onAction="#quickItemComboBoxOnAction" maxWidth="1.7976931348623157E308" promptText="Jackets" GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" />
+                              <ComboBox fx:id="quickPantComboBox" onAction="#quickItemComboBoxOnAction" maxWidth="1.7976931348623157E308" promptText="Pants" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                              <ComboBox fx:id="quickShirtComboBox" onAction="#quickItemComboBoxOnAction" maxWidth="1.7976931348623157E308" promptText="Shirts" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
+                              <ComboBox fx:id="quickDressComboBox" onAction="#quickItemComboBoxOnAction" maxWidth="1.7976931348623157E308" promptText="Dress" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" />
+                              <ComboBox fx:id="quickDryCleanComboBox" onAction="#quickItemComboBoxOnAction" maxWidth="1.7976931348623157E308" promptText="Dry Clean" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" />
+                              <ComboBox fx:id="quickOtherComboBox" onAction="#quickItemComboBoxOnAction" maxWidth="1.7976931348623157E308" promptText="Others" GridPane.columnIndex="5" GridPane.hgrow="ALWAYS" />
                            </children>
-                        </HBox>
-                        <TableView fx:id="itemsTable" editable="true">
+                        </GridPane>
+                        <TableView fx:id="itemsTable" editable="true" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="itemsTableNameCol" minWidth="550.0" prefWidth="75.0" text="Description" />
-                            <TableColumn fx:id="itemsTableQuantityCol" text="Quantity" />
-                              <TableColumn fx:id="itemsTableUnitPriceCol" minWidth="12.0" prefWidth="90.0" text="Unit Price" />
-                              <TableColumn fx:id="itemsTablePriceCol" editable="false" text="Price" />
+                            <TableColumn fx:id="itemsTableNameCol" prefWidth="600.0" text="Description" />
+                            <TableColumn fx:id="itemsTableQuantityCol" prefWidth="133.0" text="Quantity" />
+                            <TableColumn fx:id="itemsTableUnitPriceCol" prefWidth="133.0" text="Unit Price" />
+                            <TableColumn fx:id="itemsTablePriceCol" editable="false" prefWidth="134.0" text="Price" />
                           </columns>
                         </TableView>
                      </children>
