@@ -26,7 +26,7 @@
             <Separator prefWidth="200.0" />
             <HBox styleClass="DefaultSpacing" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox spacing="5.0" HBox.hgrow="NEVER">
+                  <VBox spacing="5.0" HBox.hgrow="NEVER" minWidth="370.0">
                      <children>
                         <GridPane hgap="10.0" styleClass="DefaultSpacing" vgap="10.0">
                           <columnConstraints>
