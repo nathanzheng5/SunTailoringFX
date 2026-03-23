@@ -30,7 +30,7 @@
             <TextField fx:id="attachmentTextField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <HTMLEditor fx:id="bodyHtmlEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" minWidth="900.0" />
+      <HTMLEditor fx:id="bodyHtmlEditor" minWidth="900.0" />
    </children>
    <stylesheets>
       <URL value="@StyleSheets/Containers.css" />

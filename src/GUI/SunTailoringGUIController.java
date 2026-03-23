@@ -798,7 +798,7 @@ public class SunTailoringGUIController implements Initializable {
             if (!cc.isEmpty()) {
                 controller.setCC(cc);
             }
-            final String subject = String.format(config.getProperty("invoice.maker.default.mail.subject"), activeInvoice.getInvoiceNumber());
+            final String subject = String.format(config.getProperty("invoice.maker.default.mail.subject", "Invoice #%s"), activeInvoice.getInvoiceNumber());
             controller.setSubject(subject);
 
             String message = "Dear " + activeInvoice.getCustomerInfo().getName() + ",<br><br>" +
@@ -814,6 +814,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.show();
 
         } catch (Exception e) {
+            e.printStackTrace();
             GuiUtils.showWarningAlertAndWait("Failed loading mail dialog");
         }
     }
