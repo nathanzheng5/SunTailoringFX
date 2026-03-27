@@ -8,8 +8,8 @@ A JavaFX desktop application for tailoring business management — invoices, cus
 - **UI Framework:** JavaFX with FXML layouts
 - **Build System:** IntelliJ IDEA (no Maven/Gradle — use the `.iml` module file)
 - **Testing:** JUnit 4.13.1 + Hamcrest
-- **Key Libraries:** `javax.mail` (email), `barbecue` (barcode generation)
-- **Data Persistence:** Java binary serialization (`.ser` files in `Save/`, `Expenses/`, `Settings/` directories — gitignored)
+- **Key Libraries:** `javax.mail` (email), `barbecue` (barcode generation), `org.xerial:sqlite-jdbc` (database)
+- **Data Persistence:** SQLite database at `Settings/suntailoring.db` (gitignored)
 
 ## Project Structure
 
@@ -31,7 +31,8 @@ test/
 - `src/GUI/SunTailoringGUI.java` — JavaFX `Application` entry point
 - `src/GUI/SunTailoringGUIController.java` — Main window controller (largest file, core logic)
 - `src/Data/Invoice.java` — Core invoice entity with JavaFX properties
-- `src/Data/InvoiceStore.java` — Serialized invoice persistence
+- `src/Data/Database.java` — SQLite singleton, schema lifecycle and migrations
+- `src/Data/InvoiceStore.java` — Invoice persistence (SQLite-backed)
 - `src/Utils/GmailSender.java` — Gmail integration for sending invoices
 - `src/Html/InvoiceHtml.java` — HTML invoice generation
 
@@ -53,5 +54,6 @@ test/
 ## Development Notes
 
 - Run/build through IntelliJ IDEA — no CLI build scripts exist
-- Data files are stored in `Save/`, `Expenses/`, and `Settings/` directories (gitignored)
-- Use migration scripts in `src/scripts/` when upgrading serialized data formats
+- Database is at `Settings/suntailoring.db` (gitignored); WAL mode is enabled
+- Schema versioning uses `PRAGMA user_version` — add new migrations in `Database.java` as `applyV2`, `applyV3`, etc.
+- `src/scripts/MigrateToSqlite.java` was a one-time migration from the old `.dat` files and has already been run
