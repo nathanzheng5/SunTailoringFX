@@ -1,5 +1,6 @@
 package GUI;
 
+import Data.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,6 +30,7 @@ public class SunTailoringGUI extends Application {
         primaryStage.setOnCloseRequest(event -> {
             controller.stopSummaryTimer();
             controller.saveAddressBook();
+            Database.getInstance().close();
         });
     }
 

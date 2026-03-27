@@ -1,18 +1,13 @@
 package Data;
 
-import Utils.PathUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static Utils.PathUtils.EXPENSES_DIR_PATH;
 
 public class ExpenseStore {
 
@@ -26,30 +21,29 @@ public class ExpenseStore {
     private static ExpenseStore instance;
 
     private final Map<Integer, Expense> expenses;
-
     private int maxId;
 
     private ExpenseStore() {
         expenses = new HashMap<>();
+        loadAll();
+    }
 
-        try {
-            PathUtils.createDirectoryIfNecessary(EXPENSES_DIR_PATH);
-            Files.walk(EXPENSES_DIR_PATH).forEach(file -> {
-                try (ObjectInputStream is = new ObjectInputStream(Files.newInputStream(file))) {
-                    Expense expense = Expense.deserialize(is);
-                    int id = expense.getId();
-                    if (id > maxId) {
-                        maxId = id;
-                    }
-                    expenses.put(id, expense);
-
-                } catch (IOException ignore) {
-                }
-            });
-
-            System.out.println("Loaded " + expenses.size() + " expenses");
-
-        } catch (IOException e) {
+    private void loadAll() {
+        Connection conn = Database.getInstance().getConnection();
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM expenses")) {
+            while (rs.next()) {
+                int id          = rs.getInt("id");
+                LocalDate date  = LocalDate.ofEpochDay(rs.getLong("date"));
+                String desc     = rs.getString("description");
+                double total    = rs.getDouble("total");
+                Expense expense = new Expense(id, date, desc, total);
+                expenses.put(id, expense);
+                if (id > maxId) maxId = id;
+            }
+            System.out.println("Loaded " + expenses.size() + " expenses.");
+        } catch (SQLException e) {
+            System.err.println("Failed loading expenses: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -59,36 +53,38 @@ public class ExpenseStore {
     }
 
     public void createExpenseAndSave(LocalDate date, String description, double total) {
-        int id = maxId + 1;
-        maxId = id;
-        Expense expense = new Expense(id, date, description, total);
-        save(expense);
+        int id = ++maxId;
+        save(new Expense(id, date, description, total));
     }
 
     public void duplicateExpenseAndSave(Expense expense) {
-        int id = maxId + 1;
-        maxId = id;
-        Expense duplicatedExpense = new Expense(id, expense.getDate(), expense.getDescription() + " (Duplicated)", expense.getTotal());
-        save(duplicatedExpense);
+        int id = ++maxId;
+        save(new Expense(id, expense.getDate(), expense.getDescription() + " (Duplicated)", expense.getTotal()));
     }
 
     public void save(Expense expense) {
         expenses.put(expense.getId(), expense);
-        File outputFile = new File(EXPENSES_DIR_PATH + "/" + expense.getId() + ".dat");
-        try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(outputFile))) {
-            expense.serialize(os);
-        } catch (IOException e) {
-            System.err.println("Save Expense failed");
+        Connection conn = Database.getInstance().getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "INSERT OR REPLACE INTO expenses (id, date, description, total) VALUES (?,?,?,?)")) {
+            ps.setInt(1, expense.getId());
+            ps.setLong(2, expense.getDate().toEpochDay());
+            ps.setString(3, expense.getDescription());
+            ps.setDouble(4, expense.getTotal());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Save expense failed: " + e.getMessage());
         }
     }
 
     public void delete(Expense expense) {
         expenses.remove(expense.getId());
-        try {
-            Files.deleteIfExists(Paths.get(EXPENSES_DIR_PATH + "/" + expense.getId() + ".dat"));
-        } catch (IOException e) {
-            System.err.println("Failed deleting expense file " + expense.getId() + ".dat");
+        Connection conn = Database.getInstance().getConnection();
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM expenses WHERE id = ?")) {
+            ps.setInt(1, expense.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Delete expense failed: " + e.getMessage());
         }
     }
-
 }

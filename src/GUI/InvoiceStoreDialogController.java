@@ -255,11 +255,7 @@ public class InvoiceStoreDialogController implements Initializable {
         InvoiceStoreFilter invoiceStoreFilter = new InvoiceStoreFilter(
                 customerText, showNotDoneOnly, hideDryCleanOnly, dueDateSelectionIndex, inDateSelectionIndex);
 
-        try (ObjectOutputStream fos = new ObjectOutputStream(new FileOutputStream(PathUtils.INVOICE_STORE_FILTER_DAT_FILE))) {
-            invoiceStoreFilter.serialize(fos);
-        } catch (IOException e) {
-            GuiUtils.showWarningAlertAndWait("Save Invoice Store Filter Failed!");
-        }
+        invoiceStoreFilter.save();
     }
 
     private Predicate<Invoice> getCustomerTextPredicate() {

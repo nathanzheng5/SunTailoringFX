@@ -85,17 +85,9 @@ public class QuickItemsSettingsDialogController implements Initializable {
     }
 
     public void saveQuickItems() {
-        try {
-            PathUtils.createDirectoryIfNecessary(PathUtils.SETTINGS_DIR_PATH);
-
-            try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(PathUtils.getQuickItemsDatFile(name)))) {
-                quickItems.serialize(os);
-            }
-            modified.setValue(false);
-            System.out.println("Successfully saved Quick " + name);
-        } catch (IOException e) {
-            GuiUtils.showWarningAlertAndWait("Failed Saving quick items");
-        }
+        quickItems.save(name);
+        modified.setValue(false);
+        System.out.println("Successfully saved Quick " + name);
     }
 
     public void addQuickItem(ActionEvent actionEvent) {

@@ -28,6 +28,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="org.xerial:sqlite-jdbc:3.45.1.0" level="project" />
     <orderEntry type="library" name="com.sun.mail:javax.mail:1.6.2" level="project" />
     <orderEntry type="library" name="net.sourceforge.barbecue" level="project" />
     <orderEntry type="library" name="lib" level="project" />

@@ -37,14 +37,10 @@ import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import static Utils.PathUtils.ADDRESS_BOOK_DAT_FILE;
-import static Utils.PathUtils.SETTINGS_DIR_PATH;
 
 public class SunTailoringGUIController implements Initializable {
 
@@ -211,19 +207,7 @@ public class SunTailoringGUIController implements Initializable {
         activeInvoiceState = ActiveInvoiceState.NEW;
         updateInvoiceNumberTextFieldBackgroundColor();
 
-        AddressBook addressBook = null;
-        if (ADDRESS_BOOK_DAT_FILE.exists()) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ADDRESS_BOOK_DAT_FILE))) {
-                addressBook = AddressBook.deserialize(ois);
-            } catch (Exception ignore) {
-            }
-        }
-
-        if (addressBook == null) {
-            GuiUtils.showWarningAlertAndWait("Can't find saved address book in Settings. Address book will be empty");
-            addressBook = new AddressBook(Collections.emptyList());
-        }
-        this.addressBook = addressBook;
+        this.addressBook = AddressBook.load();
 
         summaryTimer = new Timer();
         summaryTimer.schedule(new TimerTask() {
@@ -604,16 +588,7 @@ public class SunTailoringGUIController implements Initializable {
     }
 
     public void saveAddressBook() {
-        try {
-            PathUtils.createDirectoryIfNecessary(SETTINGS_DIR_PATH);
-            try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(ADDRESS_BOOK_DAT_FILE))) {
-                addressBook.serialize(os);
-            }
-            System.out.println("Successfully saved address book " + ADDRESS_BOOK_DAT_FILE.getPath());
-
-        } catch (IOException e) {
-            System.err.println("Address book saving failed");
-        }
+        addressBook.save();
     }
 
     public void showQuickItemsSettingsDialog(ActionEvent actionEvent) {
@@ -674,19 +649,7 @@ public class SunTailoringGUIController implements Initializable {
     }
 
     private QuickItems loadQuickItems(String name) {
-        final File datFile = PathUtils.getQuickItemsDatFile(name);
-        QuickItems quickItems = null;
-        if (datFile.exists()) {
-            try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(datFile))) {
-                quickItems = QuickItems.deserialize(is);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (quickItems == null) {
-            quickItems = new QuickItems(new ArrayList<>());
-        }
-        return quickItems;
+        return QuickItems.load(name);
     }
 
     public void showInvoiceStoreDialog() {
@@ -695,10 +658,7 @@ public class SunTailoringGUIController implements Initializable {
             final Parent root = fxmlLoader.load();
             final InvoiceStoreDialogController controller = fxmlLoader.getController();
 
-            InvoiceStoreFilter invoiceStoreFilter = null;
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PathUtils.INVOICE_STORE_FILTER_DAT_FILE))) {
-                invoiceStoreFilter = InvoiceStoreFilter.deserialize(ois);
-            } catch (Exception ignore) {}
+            InvoiceStoreFilter invoiceStoreFilter = InvoiceStoreFilter.load();
 
             controller.setInvoiceStore(invoiceStore, invoiceStoreFilter);
             controller.selectedInvoiceProperty().addListener((observable, oldValue, newValue) -> {
