@@ -4,10 +4,6 @@ import Data.CustomerInfo;
 import Data.Invoice;
 import Data.Item;
 import Utils.Utils;
-import net.sourceforge.barbecue.Barcode;
-import net.sourceforge.barbecue.BarcodeException;
-import net.sourceforge.barbecue.BarcodeFactory;
-import net.sourceforge.barbecue.output.OutputException;
 
 import java.awt.*;
 import java.awt.print.PageFormat;
@@ -21,9 +17,6 @@ public class InvoicePrinter implements Printable {
     private static float MEDIUM_FONT_SIZE = 10;
     private static float SMALL_FONT_SIZE = 8;
     private static int MAX_NUM_CHARS_PER_LINE = 35;
-    private static double BAR_CODE_WIDTH = 0.5;
-    private static double BAR_CODE_HEIGHT = 5;
-
     private final Invoice invoice;
 
     private int x = 0;
@@ -50,16 +43,6 @@ public class InvoicePrinter implements Printable {
         property = config.getProperty("invoice.printer.max.num.chars.per.line");
         if (property != null) {
             MAX_NUM_CHARS_PER_LINE = Integer.parseInt(property);
-        }
-
-        property = config.getProperty("invoice.printer.bar.code.width");
-        if (property != null) {
-            BAR_CODE_WIDTH = Double.parseDouble(property);
-        }
-
-        property = config.getProperty("invoice.printer.bar.code.height");
-        if (property != null) {
-            BAR_CODE_HEIGHT = Double.parseDouble(property);
         }
 
     }
@@ -154,16 +137,8 @@ public class InvoicePrinter implements Printable {
         y += (int) SMALL_FONT_SIZE + 1;
         graphics.drawString(txt, x, y);
 
-        // print invoice number barcode
-        y += 10;
-        try {
-            Barcode barcode = BarcodeFactory.createCode128A(invoice.getInvoiceNumber());
-            barcode.setDrawingText(false);
-            barcode.setBarWidth((int) BAR_CODE_WIDTH);
-            barcode.setBarHeight((int) BAR_CODE_HEIGHT);
-            barcode.draw((Graphics2D) graphics, x, y);
-        } catch (BarcodeException | OutputException ignore) {}
-
+        drawDash(g2d, graphics);
+        drawDash(g2d, graphics);
         return PAGE_EXISTS;
     }
 
