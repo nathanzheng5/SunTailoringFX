@@ -87,8 +87,6 @@ public class SunTailoringGUIController implements Initializable {
     private CheckBox pickedUpCheckBox;
 
     @FXML
-    public ImageView addressBookImageButton;
-    @FXML
     public TextField customerNameTextField;
     @FXML
     public TextField customerPhoneTextField;
