@@ -5,6 +5,7 @@ import Html.Element;
 import Html.InvoiceHtml;
 import Html.InvoicePrinter;
 import Utils.GmailSender;
+import Utils.GoogleDriveUploader;
 import Utils.PathUtils;
 import Utils.PropertiesConfiguration;
 import Utils.Utils;
@@ -21,7 +22,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -37,6 +37,7 @@ import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -339,9 +340,9 @@ public class SunTailoringGUIController implements Initializable {
     }
 
     private Task<Integer> createUpdateToDoTmrTask() {
-        return new Task<Integer>() {
+        return new Task<>() {
             @Override
-            protected Integer call() throws Exception {
+            protected Integer call() {
                 return (int) invoiceStore.all().stream()
                         .filter(invoice -> !invoice.isDryCleanOnly() && !invoice.getDone())
                         .filter(invoice -> Utils.getNextBusinessDayDateRange(LocalDate.now())
@@ -357,7 +358,7 @@ public class SunTailoringGUIController implements Initializable {
     }
 
     private Task<Void> createMailSendTask(String email, String subject, String body) {
-        return new Task<Void>() {
+        return new Task<>() {
             @Override
             protected Void call() throws Exception {
                 GmailSender.DEFAULT.sendMail(email,
@@ -382,7 +383,7 @@ public class SunTailoringGUIController implements Initializable {
     }
 
     private <T> void setupPromptTextButtonCell(ComboBox<T> comboBox) {
-        comboBox.setButtonCell(new ListCell<T>() {
+        comboBox.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
@@ -851,6 +852,74 @@ public class SunTailoringGUIController implements Initializable {
 
     public boolean getSendEmailWhenMarkedDone() {
         return Boolean.parseBoolean(config.getProperty("mail.send_when_invoice_marked_done", "false"));
+    }
+
+    @FXML
+    public void uploadDatabaseToGoogleDrive() {
+        String clientId = config.getProperty("google.drive.client_id", "");
+        String clientSecret = config.getProperty("google.drive.client_secret", "");
+
+        if (clientId.isEmpty() || clientSecret.isEmpty()) {
+            TextInputDialog idDialog = new TextInputDialog();
+            idDialog.setTitle("Google Drive Setup");
+            idDialog.setHeaderText(
+                    "Enter your Google OAuth2 Client ID\n\n" +
+                    "To get credentials:\n" +
+                    "  1. Go to console.cloud.google.com\n" +
+                    "  2. Create a project and enable the Google Drive API\n" +
+                    "  3. Go to Credentials \u2192 Create OAuth 2.0 Client ID (Desktop App type)\n" +
+                    "  4. Copy the Client ID below:");
+            idDialog.setContentText("Client ID:");
+            java.util.Optional<String> idResult = idDialog.showAndWait();
+            if (!idResult.isPresent() || idResult.get().trim().isEmpty()) return;
+            clientId = idResult.get().trim();
+
+            TextInputDialog secretDialog = new TextInputDialog();
+            secretDialog.setTitle("Google Drive Setup");
+            secretDialog.setHeaderText("Enter the Client Secret for your OAuth2 credential:");
+            secretDialog.setContentText("Client Secret:");
+            java.util.Optional<String> secretResult = secretDialog.showAndWait();
+            if (!secretResult.isPresent() || secretResult.get().trim().isEmpty()) return;
+            clientSecret = secretResult.get().trim();
+
+            config.setProperty("google.drive.client_id", clientId);
+            config.setProperty("google.drive.client_secret", clientSecret);
+            config.save();
+        }
+
+        String refreshToken = config.getProperty("google.drive.refresh_token", "");
+        boolean needsAuth = refreshToken.isEmpty();
+
+        if (needsAuth && !GuiUtils.showConfirmationAlertAndWait(
+                "Your browser will open for Google sign-in to authorize\n" +
+                "access to Google Drive. Click OK to continue.")) {
+            return;
+        }
+
+        final String fClientId = clientId;
+        final String fClientSecret = clientSecret;
+        final String fRefreshToken = refreshToken;
+
+        Task<Void> uploadTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                GoogleDriveUploader uploader = new GoogleDriveUploader(fClientId, fClientSecret, fRefreshToken);
+                if (!uploader.isAuthorized()) {
+                    String newToken = uploader.authorize();
+                    config.setProperty("google.drive.refresh_token", newToken);
+                    config.save();
+                }
+                uploader.uploadFile(new File(PathUtils.DB_PATH));
+                return null;
+            }
+        };
+
+        uploadTask.setOnSucceeded(e -> GuiUtils.showInfoAlertAndWait("Database backed up to Google Drive successfully."));
+        uploadTask.setOnFailed(e -> GuiUtils.showWarningAlertAndWait("Upload failed: " + uploadTask.getException().getMessage()));
+
+        Thread t = new Thread(uploadTask);
+        t.setDaemon(true);
+        t.start();
     }
 
 }
