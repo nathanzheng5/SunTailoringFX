@@ -3,6 +3,14 @@
 }
 
 .medium-text-field {
+    -fx-font-size: 14pt;
+}
+
+.small-text-field {
     -fx-font-size: 12pt;
+}
+
+.standard-table {
+    -fx-font-size: 18px;
 }
 

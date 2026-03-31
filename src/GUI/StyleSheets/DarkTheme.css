@@ -1,6 +1,7 @@
 /* DarkTheme.css - Dark theme for SunTailoringFX */
 
 .root {
+    -fx-font-size: 18px;
     -fx-base: #3c3f41;
     -fx-background: #2b2b2b;
     -fx-control-inner-background: #45494a;

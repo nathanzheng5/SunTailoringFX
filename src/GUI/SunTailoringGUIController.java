@@ -99,10 +99,6 @@ public class SunTailoringGUIController implements Initializable {
     @FXML
     public TextField creditTextField;
 
-    public TextField cashTextField;
-    public Label changeLabel;
-    public Label changeSuggestionLabel;
-
     @FXML
     public Button saveInvoiceButton;
     @FXML
@@ -262,11 +258,6 @@ public class SunTailoringGUIController implements Initializable {
         String invoiceNumber = generateInvoiceNumber();
         setActiveInvoice(Invoice.createEmptyInvoice(invoiceNumber), ActiveInvoiceState.NEW);
         clearQuickItemComboBoxSelection();
-        clearCashChangeFields();
-    }
-
-    private void clearCashChangeFields() {
-        cashTextField.setText("");  // change field listens to this
     }
 
     private void clearQuickItemComboBoxSelection() {
@@ -412,10 +403,10 @@ public class SunTailoringGUIController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        itemsTableNameCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.60));
-        itemsTableQuantityCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1334));
-        itemsTableUnitPriceCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1333));
-        itemsTablePriceCol.prefWidthProperty().bind(itemsTable.widthProperty().subtract(2).multiply(0.1333));
+        itemsTableNameCol.setMaxWidth(1f * Integer.MAX_VALUE * 55);
+        itemsTableQuantityCol.setMaxWidth(1f * Integer.MAX_VALUE * 15);
+        itemsTableUnitPriceCol.setMaxWidth(1f * Integer.MAX_VALUE * 15);
+        itemsTablePriceCol.setMaxWidth(1f * Integer.MAX_VALUE * 15);
 
         setupPromptTextButtonCell(quickJacketComboBox);
         setupPromptTextButtonCell(quickPantComboBox);
@@ -476,25 +467,6 @@ public class SunTailoringGUIController implements Initializable {
         activeInvoice.creditProperty().addListener(event -> setActiveInvoiceState(ActiveInvoiceState.EDITED));
 
         TextFormatter<Number> currencyFormatter = new TextFormatter<>(new CurrencyStringConverter());
-        cashTextField.setTextFormatter(currencyFormatter);
-        cashTextField.textProperty().addListener(event -> {
-            try {
-                double cash = Double.parseDouble(cashTextField.getText());  // customer's cash must be already rounded
-                double total = CashCalculator.round(activeInvoice.getTotal());
-                double change = Math.max(0, (cash - total));
-                if (change > 0) {
-                    changeLabel.setText(new CurrencyStringConverter().toString(change));
-                    changeSuggestionLabel.setText(CashCalculator.asString(CashCalculator.distribute(change)));
-                } else {
-                    changeLabel.setText("");
-                    changeSuggestionLabel.setText("");
-                }
-
-            } catch (NumberFormatException e) {
-                changeLabel.setText("");
-                changeSuggestionLabel.setText("");
-            }
-        });
 
         subtotalLabel.textProperty().bindBidirectional(activeInvoice.subtotalProperty(), new CurrencyStringConverter());
         taxLabel.textProperty().bindBidirectional(activeInvoice.taxProperty(), new CurrencyStringConverter());
@@ -584,6 +556,7 @@ public class SunTailoringGUIController implements Initializable {
             stage.show();
 
         } catch (Exception e) {
+            e.printStackTrace();
             GuiUtils.showWarningAlertAndWait("Failed loading address book dialog");
         }
     }

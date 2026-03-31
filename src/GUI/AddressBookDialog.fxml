@@ -6,14 +6,15 @@
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="DefaultSpacing" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AddressBookDialogController">
    <stylesheets>
       <URL value="@StyleSheets/Containers.css" />
+      <URL value="@StyleSheets/TextControls.css" />
    </stylesheets>
    <children>
       <TextField fx:id="searchTextField" promptText="Search customer name, phone number, or email" />
-      <TableView fx:id="addressBookTable">
+      <TableView fx:id="addressBookTable" styleClass="standard-table" VBox.vgrow="ALWAYS">
         <columns>
-          <TableColumn fx:id="nameCol" minWidth="200.0" prefWidth="75.0" text="Name" />
-          <TableColumn fx:id="phoneCol" minWidth="100.0" prefWidth="75.0" text="Phone" />
-            <TableColumn fx:id="emailCol" minWidth="300.0" prefWidth="75.0" text="Email" />
+          <TableColumn fx:id="nameCol" prefWidth="25.0" text="Name" />
+          <TableColumn fx:id="phoneCol" prefWidth="25.0" text="Phone" />
+          <TableColumn fx:id="emailCol" prefWidth="50.0" text="Email" />
         </columns>
       </TableView>
    </children>

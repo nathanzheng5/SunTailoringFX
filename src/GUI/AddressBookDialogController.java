@@ -65,6 +65,11 @@ public class AddressBookDialogController implements Initializable {
 
         selectedCustomerInfo = new ReadOnlyObjectWrapper<>();
 
+        addressBookTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        nameCol.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+        phoneCol.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+        emailCol.setMaxWidth(1f * Integer.MAX_VALUE * 50);
+
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
