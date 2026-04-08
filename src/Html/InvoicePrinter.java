@@ -137,8 +137,6 @@ public class InvoicePrinter implements Printable {
         y += (int) SMALL_FONT_SIZE + 1;
         graphics.drawString(txt, x, y);
 
-        drawDash(g2d, graphics);
-        drawDash(g2d, graphics);
         return PAGE_EXISTS;
     }
 
