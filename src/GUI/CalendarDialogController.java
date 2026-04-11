@@ -10,7 +10,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -30,8 +32,11 @@ public class CalendarDialogController implements Initializable {
     public Button nextMonthButton;
     public Label currentMonthLabel;
     public VBox root;
+    public RadioButton dueDateRadio;
+    public RadioButton inDateRadio;
 
     private LocalDate selectedDate;
+    private boolean viewByDueDate = true;
 
     private InvoiceStore invoiceStore;
     private ReadOnlyObjectWrapper<String> selectedInvoiceNumber;
@@ -48,6 +53,10 @@ public class CalendarDialogController implements Initializable {
         initializeCalendarGrid();
         initializeWeekdayHeader();
         selectedInvoiceNumber = new ReadOnlyObjectWrapper<>();
+
+        ToggleGroup viewToggle = new ToggleGroup();
+        dueDateRadio.setToggleGroup(viewToggle);
+        inDateRadio.setToggleGroup(viewToggle);
     }
 
     public void setInvoiceStore(InvoiceStore invoiceStore) {
@@ -145,7 +154,8 @@ public class CalendarDialogController implements Initializable {
                     // make a new day label
                     Label dayLabel = new Label(Integer.toString(dayLabelCount));
                     dayLabel.setPadding(new Insets(5));
-                    dayLabel.setStyle("-fx-text-fill: darkslategray");
+                    String dayNumberColor = ThemeManager.getInstance().isDarkMode() ? "#e0e0e0" : "darkslategray";
+                    dayLabel.setStyle("-fx-text-fill: " + dayNumberColor + ";");
 
                     dayBox.getChildren().add(dayLabel);
                 }
@@ -155,6 +165,11 @@ public class CalendarDialogController implements Initializable {
         }
     }
 
+    public void onViewModeChanged(ActionEvent event) {
+        viewByDueDate = dueDateRadio.isSelected();
+        generateCalendar();
+    }
+
     private void populateMonthWithInvoices() {
         LocalDate start = selectedDate.withDayOfMonth(1);
         LocalDate end = selectedDate.withDayOfMonth(selectedDate.lengthOfMonth());
@@ -162,9 +177,13 @@ public class CalendarDialogController implements Initializable {
         Map<Integer, List<Invoice>> map = new HashMap<>();
 
         invoiceStore.all().stream()
-                .filter(invoice -> !(invoice.getDueDate().isBefore(start) || invoice.getDueDate().isAfter(end)))
+                .filter(invoice -> {
+                    LocalDate date = viewByDueDate ? invoice.getDueDate() : invoice.getInvoiceDate();
+                    return !(date.isBefore(start) || date.isAfter(end));
+                })
                 .forEach(invoice -> {
-                    int dayOfMonth = invoice.getDueDate().getDayOfMonth();
+                    LocalDate date = viewByDueDate ? invoice.getDueDate() : invoice.getInvoiceDate();
+                    int dayOfMonth = date.getDayOfMonth();
                     if (map.get(dayOfMonth) == null) {
                         map.put(dayOfMonth, new ArrayList<>());
                     }
