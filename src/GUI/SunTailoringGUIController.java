@@ -207,19 +207,30 @@ public class SunTailoringGUIController implements Initializable {
         this.addressBook = AddressBook.load();
 
         summaryTimer = new Timer();
-        summaryTimer.schedule(new TimerTask() {
-            private Summary oldSummary = null;
-            @Override
-            public void run() {
-                final Summary summary = new Summary(invoiceStore);
-                if (summary.changedFrom(oldSummary)) {
-                    try {
-                        GmailSender.DEFAULT.sendMail(getSummaryRecipient(), "Sun Tailoring Summary", summary.toHtml());
-                    } catch (Exception ignore) {}
-                }
-                oldSummary = summary;
+        long oneDayMs = 24L * 60 * 60 * 1000;
+        for (int hour : new int[]{12, 17}) {
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.HOUR_OF_DAY, hour);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            cal.set(java.util.Calendar.MILLISECOND, 0);
+            if (!cal.getTime().after(new java.util.Date())) {
+                cal.add(java.util.Calendar.DAY_OF_MONTH, 1);
             }
-        }, 60*60*1000, 60*60*1000);
+            summaryTimer.scheduleAtFixedRate(new TimerTask() {
+                private Summary oldSummary = null;
+                @Override
+                public void run() {
+                    final Summary summary = new Summary(invoiceStore);
+                    if (summary.changedFrom(oldSummary)) {
+                        try {
+                            GmailSender.DEFAULT.sendMail(getSummaryRecipient(), "Sun Tailoring Summary", summary.toHtml());
+                        } catch (Exception ignore) {}
+                    }
+                    oldSummary = summary;
+                }
+            }, cal.getTime(), oneDayMs);
+        }
     }
 
     public void sendSummary() {
