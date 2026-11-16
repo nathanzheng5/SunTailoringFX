@@ -31,5 +31,14 @@
     <orderEntry type="library" name="org.xerial:sqlite-jdbc:3.45.1.0" level="project" />
     <orderEntry type="library" name="com.sun.mail:javax.mail:1.6.2" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/26.1.0/annotations-26.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

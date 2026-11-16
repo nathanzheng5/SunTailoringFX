@@ -103,6 +103,18 @@ public class InvoiceHtml {
         parent.addChild(head);
     }
 
+    public static String maskPhoneNumber(String phone) {
+        if (phone == null || phone.trim().isEmpty()) {
+            return "";
+        }
+        String basePhone = phone.replaceAll("(?i)\\s*(ext|x|extension)\\b.*", "");
+        String digits = basePhone.replaceAll("\\D", "");
+        if (digits.length() >= 4) {
+            return "###-###-" + digits.substring(digits.length() - 4);
+        }
+        return phone.trim();
+    }
+
     public static void buildBody(Element parent, Invoice invoice, String message) {
         Element body = new Element("body");
         parent.addChild(body);
@@ -132,9 +144,9 @@ public class InvoiceHtml {
         // modify customer address to hash phone numbers and hide emails
         CustomerInfo customerInfo = invoice.getCustomerInfo();
         String billToString = customerInfo.getName();
-        if (!customerInfo.getPhone().isEmpty()) {
-            final String phone = customerInfo.getPhone();
-            billToString += "<br>###-###-" + customerInfo.getPhone().substring(phone.length() - 4, phone.length());
+        String maskedPhone = maskPhoneNumber(customerInfo.getPhone());
+        if (!maskedPhone.isEmpty()) {
+            billToString += "<br>" + maskedPhone;
         }
         div.setContent("<b>Invoice Date:</b> " + invoice.getInvoiceDate() + "<br>" +
             "<b>Due Date:</b> " + invoice.getDueDate() + "<br>" +
