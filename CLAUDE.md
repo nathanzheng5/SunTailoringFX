@@ -2,6 +2,8 @@
 
 A JavaFX desktop application for tailoring business management — invoices, customers, expenses, and financial summaries.
 
+> **Note:** The comprehensive and universal agent guide is maintained in [AGENTS.md](AGENTS.md).
+
 ## Tech Stack
 
 - **Language:** Java (JDK 8+)
